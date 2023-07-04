@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="app">
+      <div class="cart">
+        <div class="cart_products">
+          <div class="cart_products_header">
+            <h2 class="cart_products_title">Shopping Cart</h2>
+            <span class="cart_products_total"
+              >{{ shoppingCartItemsCount}} items</span
+            >
+          </div>
+          <div class="cart_products_content">
+            <div
+              v-for="(item) in shoppingCartProducts"
+              :key="item.id"
+              class="cart_product"
+            >
+              <div class="cart_product_pic">
+                <img :src="item.imgSrc" :alt="item.name" />
+              </div>
+              <div class="cart_product_name">
+                <span class="cart_product_name_category"
+                  >{{item.category}}</span
+                >
+                <div class="cart_product_name_title">{{item.name}}</div>
+              </div>
+              <div class="cart_product_count">
+                <button
+                  class="cart_product_count_btn cart_product_count_btn--minus"
+                  @click="updateQuantityOfProduct(item.id, 'decrease')"
+                >
+                  －
+                </button>
+                <div class="cart_product_count_number">{{item.quantity}}</div>
+                <button
+                  class="cart_product_count_btn cart_product_count_btn--plus"
+                  @click="updateQuantityOfProduct(item.id, 'increase')"
+                >
+                  ＋
+                </button>
+              </div>
+              <div class="cart_product_price">$ {{item.price}}</div>
+              <div
+                class="cart_product_delete"
+                @click="deleteProduct(item.id)"
+              ></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="cart_summary">
+          <div class="cart_summary_header">
+            <h2 class="cart_summary_title">Summary</h2>
+          </div>
+          <div class="cart_summary_content">
+            <div class="cart_summary_products">
+              <div
+                v-for="(item, index) in shoppingCartProducts"
+                :key="index"
+                class="cart_summary_product"
+              >
+                <div class="cart_summary_product_name">
+                  {{item.quantity}} x {{item.name}}
+                </div>
+                <div class="cart_summary_product_sum">$ {{item.sum}}</div>
+              </div>
+            </div>
+
+            <div class="cart_summary_checkout">
+              <div class="cart_summary_checkout_price">
+                <div class="cart_summary_checkout_price_text">TOTAL PRICE</div>
+                <div class="cart_summary_checkout_price_number">
+                  $ {{ shoppingCartProductsSum }}
+                </div>
+              </div>
+              <button class="cart_summary_checkout_btn">CHECKOUT</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script>
+      const app = Vue.createApp({
+        data() {
+          return {
+            shoppingCartData: [
+              {
+                id: "111",
+                imgSrc: "./imgs/black.jpg",
+                category: "Shirt",
+                name: "Cotton T-shirt",
+                price: 16.9,
+                quantity: 1,
+              },
+              {
+                id: "222",
+                imgSrc: "./imgs/white.jpg",
+                category: "Shirt",
+                name: "Cotton T-shirt",
+                price: 16.9,
+                quantity: 2,
+              },
+              {
+                id: "333",
+                imgSrc: "./imgs/jeans.jpg",
+                category: "Pants",
+                name: "Skinny Fit Jeans",
+                price: 89.9,
+                quantity: 3,
+              },
+              {
+                id: "444",
+                imgSrc: "./imgs/shirt.jpg",
+                category: "Shirt",
+                name: "Modal Shirt",
+                price: 39.9,
+                quantity: 1,
+              },
+            ],
+          };
+        },
+
+        computed: {
+          shoppingCartProducts() {
+            const products = [...this.shoppingCartData];
+
+            products.forEach(
+              (product) =>
+                (product.sum =
+                  Math.floor(product.price * product.quantity * 10) / 10)
+            );
+
+            return products;
+          },
+
+          shoppingCartItemsCount() {
+            return this.shoppingCartProducts.length;
+          },
+
+          shoppingCartProductsSum() {
+            return (
+              Math.floor(
+                this.shoppingCartProducts.reduce(
+                  (acc, product) => acc + product.sum,
+                  0
+                ) * 10
+              ) / 10
+            );
+          },
+        },
+
+        methods: {
+          updateQuantityOfProduct(id, feature) {
+            const item = this.shoppingCartData.find((item) => item.id === id);
+            // 效能 O(n)
+            if (item.quantity === 1 && feature === "decrease") return;
+            feature === "increase" ? item.quantity++ : item.quantity--;
+          },
+
+          deleteProduct(id) {
+            const itemIndex = this.shoppingCartData.findIndex(
+              (item) => item.id === id
+            );
+
+            this.shoppingCartData.splice(itemIndex, 1);
+          },
+        },
+      });
+      app.mount("#app");
+    </script>
+  </body>
+
+  <style>
+    * {
+      padding: 0;
+      margin: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: #ddd;
+    }
+
+    .cart {
+      width: 80%;
+      height: 80vh;
+      background-color: #fff;
+      box-shadow: 2px 2px 8px 4px rgba(0, 0, 0, 0.3);
+      border-radius: 9px;
+
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+
+      display: flex;
+    }
+
+    .cart_products {
+      width: 60%;
+      background-color: #fff;
+      padding: 20px 40px;
+      overflow: auto;
+      border-top-left-radius: 9px;
+      border-bottom-left-radius: 9px;
+    }
+
+    .cart_products_header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      padding-bottom: 50px;
+      border-bottom: 1px solid #999;
+    }
+
+    .cart_products_header h1 {
+      font-size: 24px;
+    }
+
+    .cart_products_header span {
+      font-size: 18px;
+    }
+
+    .cart_product {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 0;
+      border-bottom: 1px solid #999;
+    }
+
+    .cart_product_pic {
+      width: 100px;
+      height: 100px;
+    }
+
+    .cart_product_pic img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .cart_product_name {
+      width: 120px;
+    }
+
+    .cart_product_name_category {
+      color: #555;
+    }
+
+    .cart_product_name_title {
+      font-weight: 500;
+      font-size: 18px;
+      margin-top: 5px;
+    }
+
+    .cart_product_count {
+      display: flex;
+      justify-content: center;
+    }
+
+    .cart_product_count_number {
+      display: flex;
+      align-items: center;
+      font-size: 14px;
+      padding: 0px 10px;
+      border: 1px solid #ddd;
+      pointer-events: none;
+    }
+
+    .cart_product_count_btn {
+      font-size: 20px;
+      background-color: transparent;
+      border: none;
+      cursor: pointer;
+    }
+
+    .cart_product_count_btn.cart_product_count_btn--minus {
+      padding-right: 5px;
+    }
+
+    .cart_product_count_btn.cart_product_count_btn--plus {
+      padding-left: 5px;
+    }
+
+    .cart_product_price {
+      font-weight: 500;
+      font-size: 18px;
+    }
+
+    .cart_product_delete {
+      position: relative;
+      cursor: pointer;
+
+      width: 20px;
+      height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .cart_product_delete::before {
+      display: block;
+      content: "";
+      width: 12px;
+      height: 1.5px;
+      background-color: #999;
+      position: absolute;
+      transform: rotate(45deg);
+    }
+
+    .cart_product_delete::after {
+      display: block;
+      content: "";
+      width: 12px;
+      height: 1.5px;
+      background-color: #999;
+      position: absolute;
+      transform: rotate(-45deg);
+    }
+
+    .cart_summary {
+      width: 40%;
+      background-color: #ddd;
+      padding: 20px 40px;
+      border-top-right-radius: 9px;
+      border-bottom-right-radius: 9px;
+
+      display: flex;
+      flex-direction: column;
+    }
+
+    .cart_summary_header {
+      padding-bottom: 50px;
+      border-bottom: 1px solid #999;
+    }
+
+    .cart_summary_header h2 {
+      position: relative;
+      top: 30px;
+    }
+
+    .cart_summary_content {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .cart_summary_product {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px dashed #555;
+    }
+
+    .cart_summary_checkout {
+      margin-top: auto;
+      padding-top: 25px;
+      border-top: 1px solid #999;
+    }
+
+    .cart_summary_checkout_price {
+      position: relative;
+      top: -15px;
+
+      display: flex;
+      justify-content: space-between;
+      font-weight: 500;
+      font-size: 14px;
+    }
+
+    .cart_summary_checkout_price_number {
+      font-weight: 600;
+    }
+
+    .cart_summary_checkout_btn {
+      width: 100%;
+      padding: 8px 0;
+      background-color: #000;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+    }
+  </style>
+</html>
