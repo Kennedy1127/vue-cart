@@ -93,34 +93,34 @@
           return {
             shoppingCartData: [
               {
-                id: "111",
-                imgSrc: "./imgs/black.jpg",
-                category: "Shirt",
-                name: "Cotton T-shirt",
+                id: '111',
+                imgSrc: './imgs/black.jpg',
+                category: 'Shirt',
+                name: 'Cotton T-shirt',
                 price: 16.9,
                 quantity: 1,
               },
               {
-                id: "222",
-                imgSrc: "./imgs/white.jpg",
-                category: "Shirt",
-                name: "Cotton T-shirt",
+                id: '222',
+                imgSrc: './imgs/white.jpg',
+                category: 'Shirt',
+                name: 'Cotton T-shirt',
                 price: 16.9,
                 quantity: 2,
               },
               {
-                id: "333",
-                imgSrc: "./imgs/jeans.jpg",
-                category: "Pants",
-                name: "Skinny Fit Jeans",
+                id: '333',
+                imgSrc: './imgs/jeans.jpg',
+                category: 'Pants',
+                name: 'Skinny Fit Jeans',
                 price: 89.9,
                 quantity: 3,
               },
               {
-                id: "444",
-                imgSrc: "./imgs/shirt.jpg",
-                category: "Shirt",
-                name: "Modal Shirt",
+                id: '444',
+                imgSrc: './imgs/shirt.jpg',
+                category: 'Shirt',
+                name: 'Modal Shirt',
                 price: 39.9,
                 quantity: 1,
               },
@@ -160,9 +160,9 @@
         methods: {
           updateQuantityOfProduct(id, feature) {
             const item = this.shoppingCartData.find((item) => item.id === id);
-            // 效能 O(n)
-            if (item.quantity === 1 && feature === "decrease") return;
-            feature === "increase" ? item.quantity++ : item.quantity--;
+
+            if (item.quantity === 1 && feature === 'decrease') return;
+            feature === 'increase' ? item.quantity++ : item.quantity--;
           },
 
           deleteProduct(id) {
@@ -174,7 +174,7 @@
           },
         },
       });
-      app.mount("#app");
+      app.mount('#app');
     </script>
   </body>
 
@@ -310,7 +310,7 @@
 
     .cart_product_delete::before {
       display: block;
-      content: "";
+      content: '';
       width: 12px;
       height: 1.5px;
       background-color: #999;
@@ -320,7 +320,7 @@
 
     .cart_product_delete::after {
       display: block;
-      content: "";
+      content: '';
       width: 12px;
       height: 1.5px;
       background-color: #999;
