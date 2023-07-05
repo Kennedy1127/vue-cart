@@ -68,7 +68,9 @@
                 <div class="cart_summary_product_name">
                   {{item.quantity}} x {{item.name}}
                 </div>
-                <div class="cart_summary_product_sum">$ {{item.sum}}</div>
+                <div class="cart_summary_product_sum">
+                  $ {{calculatePrice(item.price, item.quantity)}}
+                </div>
               </div>
             </div>
 
@@ -93,34 +95,34 @@
           return {
             shoppingCartData: [
               {
-                id: '111',
-                imgSrc: './imgs/black.jpg',
-                category: 'Shirt',
-                name: 'Cotton T-shirt',
+                id: "111",
+                imgSrc: "./imgs/black.jpg",
+                category: "Shirt",
+                name: "Cotton T-shirt",
                 price: 16.9,
                 quantity: 1,
               },
               {
-                id: '222',
-                imgSrc: './imgs/white.jpg',
-                category: 'Shirt',
-                name: 'Cotton T-shirt',
+                id: "222",
+                imgSrc: "./imgs/white.jpg",
+                category: "Shirt",
+                name: "Cotton T-shirt",
                 price: 16.9,
                 quantity: 2,
               },
               {
-                id: '333',
-                imgSrc: './imgs/jeans.jpg',
-                category: 'Pants',
-                name: 'Skinny Fit Jeans',
+                id: "333",
+                imgSrc: "./imgs/jeans.jpg",
+                category: "Pants",
+                name: "Skinny Fit Jeans",
                 price: 89.9,
                 quantity: 3,
               },
               {
-                id: '444',
-                imgSrc: './imgs/shirt.jpg',
-                category: 'Shirt',
-                name: 'Modal Shirt',
+                id: "444",
+                imgSrc: "./imgs/shirt.jpg",
+                category: "Shirt",
+                name: "Modal Shirt",
                 price: 39.9,
                 quantity: 1,
               },
@@ -130,15 +132,7 @@
 
         computed: {
           shoppingCartProducts() {
-            const products = [...this.shoppingCartData];
-
-            products.forEach(
-              (product) =>
-                (product.sum =
-                  Math.floor(product.price * product.quantity * 10) / 10)
-            );
-
-            return products;
+            return [...this.shoppingCartData];
           },
 
           shoppingCartItemsCount() {
@@ -161,8 +155,8 @@
           updateQuantityOfProduct(id, feature) {
             const item = this.shoppingCartData.find((item) => item.id === id);
 
-            if (item.quantity === 1 && feature === 'decrease') return;
-            feature === 'increase' ? item.quantity++ : item.quantity--;
+            if (item.quantity === 1 && feature === "decrease") return;
+            feature === "increase" ? item.quantity++ : item.quantity--;
           },
 
           deleteProduct(id) {
@@ -172,9 +166,13 @@
 
             this.shoppingCartData.splice(itemIndex, 1);
           },
+
+          calculatePrice(price, quantity) {
+            return Math.floor(price * quantity * 10) / 10;
+          },
         },
       });
-      app.mount('#app');
+      app.mount("#app");
     </script>
   </body>
 
@@ -310,7 +308,7 @@
 
     .cart_product_delete::before {
       display: block;
-      content: '';
+      content: "";
       width: 12px;
       height: 1.5px;
       background-color: #999;
@@ -320,7 +318,7 @@
 
     .cart_product_delete::after {
       display: block;
-      content: '';
+      content: "";
       width: 12px;
       height: 1.5px;
       background-color: #999;
