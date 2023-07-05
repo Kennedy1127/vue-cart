@@ -33,14 +33,14 @@
               <div class="cart_product_count">
                 <button
                   class="cart_product_count_btn cart_product_count_btn--minus"
-                  @click="updateQuantityOfProduct(item.id, 'decrease')"
+                  @click="updateQuantityOfProduct(item, 'decrease')"
                 >
                   －
                 </button>
                 <div class="cart_product_count_number">{{item.quantity}}</div>
                 <button
                   class="cart_product_count_btn cart_product_count_btn--plus"
-                  @click="updateQuantityOfProduct(item.id, 'increase')"
+                  @click="updateQuantityOfProduct(item, 'increase')"
                 >
                   ＋
                 </button>
@@ -143,7 +143,7 @@
             return (
               Math.floor(
                 this.shoppingCartProducts.reduce(
-                  (acc, product) => acc + product.sum,
+                  (acc, product) => acc + product.price * product.quantity,
                   0
                 ) * 10
               ) / 10
@@ -152,8 +152,8 @@
         },
 
         methods: {
-          updateQuantityOfProduct(id, feature) {
-            const item = this.shoppingCartData.find((item) => item.id === id);
+          updateQuantityOfProduct(item, feature) {
+            // const item = this.shoppingCartData.find((item) => item.id === id);
 
             if (item.quantity === 1 && feature === "decrease") return;
             feature === "increase" ? item.quantity++ : item.quantity--;
